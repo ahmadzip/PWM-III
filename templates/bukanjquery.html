@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAB VI (Non-jQuery)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container mt-4">
+        <button type="button" id="tombolambil" class="btn btn-primary">
+            Ambil Data
+        </button>
+    </div>
+
+    <div class="card mt-3">
+        <div class="card-body">
+            <div id="data">
+                <h2 class="text-center">tidak ada data</h2>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tombolAmbil = document.getElementById('tombolambil');
+            const dataContainer = document.getElementById('data');
+
+            tombolAmbil.addEventListener('click', async () => {
+                try {
+                    dataContainer.innerHTML = `<h4 class="text-center text-muted">Mengambil data...</h4>`;
+
+                    const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+                    if (!response.ok) throw new Error('Gagal mengambil data');
+
+                    const data = await response.json();
+
+                    let output = '<ul class="list-group">';
+                    data.forEach(post => {
+                        output += `
+              <li class="list-group-item">
+                <h5>${post.title}</h5>
+                <p>${post.body}</p>
+              </li>
+            `;
+                    });
+                    output += '</ul>';
+
+                    dataContainer.innerHTML = output;
+                } catch (error) {
+                    console.error(error);
+                    dataContainer.innerHTML = `<h2 class="text-center text-danger">Gagal mengambil data</h2>`;
+                }
+            });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+
+</html>
